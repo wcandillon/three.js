@@ -5,6 +5,7 @@ import NodeVar from './NodeVar.js';
 import NodeCode from './NodeCode.js';
 import NodeCache from './NodeCache.js';
 import ParameterNode from './ParameterNode.js';
+import ParameterNodeCollection from './ParameterNodeCollection.js';
 import FunctionNode from '../code/FunctionNode.js';
 import { createNodeMaterialFromType, default as NodeMaterial } from '../materials/NodeMaterial.js';
 import { NodeUpdateType, defaultBuildStages, shaderStages } from './constants.js';
@@ -995,27 +996,11 @@ class NodeBuilder {
 
 		const layout = shaderNode.layout;
 
-		let inputs;
+		const inputs = new ParameterNodeCollection();
 
-		if ( shaderNode.isArrayInput ) {
+		for ( const input of layout.inputs ) {
 
-			inputs = [];
-
-			for ( const input of layout.inputs ) {
-
-				inputs.push( new ParameterNode( input.type, input.name ) );
-
-			}
-
-		} else {
-
-			inputs = {};
-
-			for ( const input of layout.inputs ) {
-
-				inputs[ input.name ] = new ParameterNode( input.type, input.name );
-
-			}
+			inputs.set( input.name, new ParameterNode( input.type, input.name ) );
 
 		}
 
